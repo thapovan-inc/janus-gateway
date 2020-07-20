@@ -30,15 +30,20 @@
 #include "mach_gettime.h"
 #endif
 
+
 gint64 janus_get_monotonic_time(void) {
 	struct timespec ts;
-	clock_gettime (CLOCK_MONOTONIC, &ts);
+#if __MACH__
+    clock_gettime (CLOCK_MONOTONIC, &ts);
+#elif
+    clock_gettime (CLOCK_MONOTONIC_COARSE, &ts);
+#endif
 	return (ts.tv_sec*G_GINT64_CONSTANT(1000000)) + (ts.tv_nsec/G_GINT64_CONSTANT(1000));
 }
 
 gint64 janus_get_real_time(void) {
 	struct timespec ts;
-	clock_gettime (CLOCK_REALTIME, &ts);
+    clock_gettime (CLOCK_REALTIME, &ts);
 	return (ts.tv_sec*G_GINT64_CONSTANT(1000000)) + (ts.tv_nsec/G_GINT64_CONSTANT(1000));
 }
 
