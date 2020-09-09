@@ -41,7 +41,7 @@ Janus.isExtensionEnabled = function() {
 		}
 		return Janus.extension.isInstalled();
 	} else {
-		// Firefox of others, no need for the extension (but this doesn't mean it will work)
+		// Firefox and others, no need for the extension (but this doesn't mean it will work)
 		return true;
 	}
 };
@@ -1108,7 +1108,12 @@ function Janus(gatewayCallbacks) {
 			ws.addEventListener('message', onUnbindMessage);
 			ws.addEventListener('error', onUnbindError);
 
-			ws.send(JSON.stringify(request));
+			if (ws.readyState === 1) {
+				ws.send(JSON.stringify(request));
+			} else {
+				onUnbindError();
+			}
+
 			return;
 		}
 		Janus.httpAPICall(server + "/" + sessionId, {
