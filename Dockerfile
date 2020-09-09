@@ -4,7 +4,7 @@ RUN apt update && apt install -y build-essential libmicrohttpd-dev libjansson-de
 RUN mkdir -p /usr/src
 RUN cd /usr/src && git clone https://github.com/axboe/liburing.git && cd liburing && make && make install && cd / && rm -rf /usr/src/liburing
 RUN cd /usr/src && git clone https://github.com/thapovan-inc/libnice.git && cd libnice && meson --prefix=/usr build && ninja -C build && ninja -C build install && cd / && rm -rf /usr/src/libnice
-RUN cd /usr/src/ && git clone https://libwebsockets.org/repo/libwebsockets && cd libwebsockets && mkdir build && cd build && cmake -DLWS_MAX_SMP=1 -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_C_FLAGS="-fpic" .. && make && make install && cd / && rm -rf /usr/src/libwebsockets
+RUN cd /usr/src/ && git clone -b v3.2-stable https://libwebsockets.org/repo/libwebsockets && cd libwebsockets && mkdir build && cd build && cmake -DLWS_MAX_SMP=1 -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_C_FLAGS="-fpic" .. && make && make install && cd / && rm -rf /usr/src/libwebsockets
 RUN cd /usr/src && git clone https://github.com/cisco/libsrtp.git && cd libsrtp && git checkout v2.3.0 && ./configure --prefix=/usr --enable-openssl && make shared_library && make install && cd / && rm -rf /usr/src/libsrtp
 RUN mkdir /usr/src/janus-gateway
 COPY . /usr/src/janus-gateway/
